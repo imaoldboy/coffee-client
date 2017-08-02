@@ -1,73 +1,41 @@
+'use strict';
+var config = require('./src/config');
+var tools = require('./src/tools');
 var SerialPort = require("serialport");
-var cmd_str = "0xB0C0A80101001A";
-//var cmd_str = "0xB0C0A80101001A";
-//var cmd_str = "B0C0A80101001A";
-var buffer2 = Buffer.from("B0C0A80101001A", "hex")
+//get serial device list
+var deviceList = tools.getDeviceList();
+console.log(deviceList);
 
-var buffer = new Buffer(10);
-buffer[0] = 0xB0;
-buffer[1] = 0xC0;
-buffer[2] = 0xA8;
-buffer[3] = 0x01;
-buffer[4] = 0x01;
-buffer[5] = 0x00;
-buffer[6] = 0x1A;
+const parsers = SerialPort.parsers;
 
-var port = new SerialPort("/dev/ttyUSB0",{
-    bandrate:9600,
-    autoOpen:false,
-    stopBits:1,
-timeOut:2
+const parser1 = new parsers.Readline({
+  delimiter: '\r\n'
 });
-
-function hex(str) {
-        var arr = [];
-        for (var i = 0, l = str.length; i < l; i ++) {
-                var ascii = str.charCodeAt(i);
-                arr.push(ascii);
-        }
-        arr.push(255);
-        arr.push(255);
-        arr.push(255);
-        return new Buffer(arr);
-}
-
-function writeCmd(){
-	console.log('in writeCmd()');
-/*
-	port.write(buffer, function (err, result) {
-            if (err) {
-                console.log('Error while sending message : ' + err);
-            }
-            if (result) {
-                console.log('Response received after sending message : ' + result);
-            }    
-        });
-*/
-	port.write(buffer2);
-	//port.write(buffer2, 'hex');
-	//port.write(hex(cmd_str));
-	//port.write(cmd_str,'hex');
-}
-
-port.open(function (err) {
-  if (err) {
-    return console.log('Error opening port: ', err.message);
-  }
-
-  // Because there's no callback to write, write errors will be emitted on the port:
- setInterval(writeCmd,2000);
- 
+const port1 = new SerialPort('/dev/'+deviceList[0], {
+  baudRate: 38400,
+  stopBits:2
+});
+port1.pipe(parser1);
+port1.on('open', () => console.log('Port1 open'));
+parser1.on('data', function(data){
+	console.log(data);	
+	port1.write(data+'\r\n');
+	port1.flush();
 });
 
 
-
-// The open event is always emitted
-port.on('open', function() {
-	console.log('in open');
-  // open logic
+const parser2 = new parsers.Readline({
+  delimiter: '\r\n'
+});
+const port2 = new SerialPort('/dev/'+deviceList[1], {
+  baudRate: 38400,
+  stopBits:2
+});
+port2.pipe(parser2);
+port2.on('open', () => console.log('Port2 open'));
+parser2.on('data', function(data){
+	console.log(data);	
+	port2.write(data+'\r\n');
+	port2.flush();
 });
 
-port.on('data', function (data) {
- console.log('Data:', data.toString('hex'));
-});
