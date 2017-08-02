@@ -45,4 +45,7 @@ if(deviceList.length == 2){
 	tools.reboot();
 }
 
-
+var filename = 'coffee-client.zip';
+tools.downloadFile(config.updateUrl, filename, function(){
+    console.log(filename+'下载完毕');
+});

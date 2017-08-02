@@ -1,5 +1,7 @@
 var ls = require('ls');
 var shell = require("shelljs");
+var fs = require("fs");
+var request = require('request');
 
 exports.getSendCmdStr = function (cmdPrefix, deviceAddress){
 	return Buffer.from("B0C0A80101001A", "hex")
@@ -31,7 +33,17 @@ const getDeviceList = () => {
 	return deviceList;
 }
 
+const downloadFile = (uri,filename,callback) => {
+	var stream = fs.createWriteStream(filename);
+	request(uri).pipe(stream).on('close', callback); 
+}
 
+const cleanup = () => {
+	console.log('begin to clean up!');
+}
+
+module.exports.downloadFile = downloadFile
 module.exports.reboot = reboot
+module.exports.cleanup = cleanup
 module.exports.str2hex = str2hex
 module.exports.getDeviceList = getDeviceList

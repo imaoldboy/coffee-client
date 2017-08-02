@@ -3,7 +3,7 @@ var config = {
 	serialStopBits : 2,
 	serialTimeOut : 2,
 	logFile : "false",
-	updateUrl : "",
+	updateUrl : "http://www.usertech.cn/app/uploads/2016/coffee-client.tgz",
 	filterCmd : "True",
 	machine_status_ok : 0,
 	machine_status_paid : 1,
