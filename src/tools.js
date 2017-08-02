@@ -1,11 +1,13 @@
 var ls = require('ls');
+var shell = require("shelljs");
 
 exports.getSendCmdStr = function (cmdPrefix, deviceAddress){
 	return Buffer.from("B0C0A80101001A", "hex")
 };
 
-const hello = () =>{
-	console.log('hello ~')
+const reboot = () =>{
+	console.log('begin reboot()')
+	shell.exec("sudo reboot");
 }
 
 const str2hex = (str) => {
@@ -29,6 +31,7 @@ const getDeviceList = () => {
 	return deviceList;
 }
 
-module.exports.hello = hello
+
+module.exports.reboot = reboot
 module.exports.str2hex = str2hex
 module.exports.getDeviceList = getDeviceList

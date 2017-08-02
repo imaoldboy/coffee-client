@@ -19,7 +19,8 @@
   "homepage": "https://github.com/imaoldboy/coffee-client#readme",
   "dependencies": {
     "ls": "^0.2.1",
-    "serialport": "^5.0.0"
+    "serialport": "^5.0.0",
+    "shelljs": "^0.7.8"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
