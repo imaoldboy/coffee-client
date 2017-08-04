@@ -1,4 +1,5 @@
 var config = {
+	restUrl: "http://101.200.80.132:4000/api/",
 	serialBandrate : 38400,
 	serialStopBits : 2,
 	serialTimeOut : 2,

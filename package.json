@@ -19,6 +19,7 @@
   "homepage": "https://github.com/imaoldboy/coffee-client#readme",
   "dependencies": {
     "ls": "^0.2.1",
+    "node-rest-client": "^3.1.0",
     "request": "^2.81.0",
     "serialport": "^5.0.0",
     "shelljs": "^0.7.8"
