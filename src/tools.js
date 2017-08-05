@@ -2,6 +2,7 @@ var ls = require('ls');
 var shell = require("shelljs");
 var fs = require("fs");
 var request = require('request');
+var config = require('./config')
 
 exports.getSendCmdStr = function (cmdPrefix, deviceAddress){
 	return Buffer.from("B0C0A80101001A", "hex")
@@ -42,6 +43,49 @@ const cleanup = () => {
 	console.log('begin to clean up!');
 }
 
+const getSerialNo = () => {
+	var fs       = require('fs'),
+	    readline = require('readline'),
+	    instream = fs.createReadStream('/proc/cpuinfo');
+
+	var rl = readline.createInterface(
+	{
+	    input: instream,
+	    terminal: false
+	});
+
+	rl.on('line', function(line) 
+	{
+		if(line.startsWith('Serial')){
+			var array = line.split(':');
+			if(array.length==2){
+				console.log(array[1].trim());
+				return array[1].trim();
+			}else{
+				console.log('error to read /proc/cpuinfo');
+				return 'error device'
+			}
+		}
+			
+	    // if(instream.isEnd()) ...
+	});
+}
+
+const filterCmd = (cmdstr, filterArray) => {
+	for( var i=0; i< filterArray.length; i++)
+	{
+		if(filterArray[i].startsWith(cmdstr)){
+			console.log('=====================return true.');
+			return true;
+		}
+	}
+	
+	return false;
+
+}
+
+module.exports.filterCmd = filterCmd
+module.exports.getSerialNo = getSerialNo
 module.exports.downloadFile = downloadFile
 module.exports.reboot = reboot
 module.exports.cleanup = cleanup

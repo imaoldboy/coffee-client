@@ -21,6 +21,7 @@ var config = {
 	machine_status_need_restart  : 20,
 	
 	filterCmdArray : [":010600010508EB\r\n",":010600010005F3\r\n",":010600010006F2\r\n",":010600010007F1\r\n",":010600010509EA\r\n",":010600010409EB\r\n"],
+	filterCmdArrayBooting : [":010600010508EB\r\n",":010600010005F3\r\n",":010600010006F2\r\n",":010600010007F1\r\n",":010600010001F7\r\n"],
 
 	//#message from HMI-->MainBoard
 	sys_error        : "00000BF0\r\n",
