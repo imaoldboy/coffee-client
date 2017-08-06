@@ -5,9 +5,8 @@ var SerialPort = require("serialport");
 var sleep = require('sleep');
 var deviceList = tools.getDeviceList();
 
-console.log(deviceList);
-
 if(deviceList.length == 2){
+	setInterval(getAuthority(),2000);
 	const parsers = SerialPort.parsers;
 
 	const parser1 = new parsers.Readline({
@@ -46,17 +45,20 @@ if(deviceList.length == 2){
 
 }else{
 	console.log('device list size is not 2, so begin to reboot after sleep 10 seconds.');
-	sleep(10);
-	tools.reboot();
+	sleep.sleep(10);
+	//tools.reboot();
 }
 
-
-function getAuthority(){
-	var serialno = tools.getSerialNo();
+function getUpdateFile(){
 	var filename = 'coffee-client.zip';
 	tools.downloadFile(config.updateUrl, filename, function(){
 	    console.log(filename+'下载完毕');
 	});
 }
 
+
+function getAuthority(){
+	var serialno = tools.getSerialNo();
+	
+}
 

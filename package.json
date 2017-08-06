@@ -22,7 +22,8 @@
     "node-rest-client": "^3.1.0",
     "request": "^2.81.0",
     "serialport": "^5.0.0",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "sleep": "^5.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

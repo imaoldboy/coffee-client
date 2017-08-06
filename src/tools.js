@@ -12,7 +12,11 @@ const reboot = () =>{
 	console.log('begin reboot()')
 	shell.exec("sudo reboot");
 }
-
+const unzipRuntime = () =>{
+	console.log('unzipRuntime')
+	shell.exec("tar zxvf /home/pi/coffee-client.tgz");
+	shell.exec("sh /home/pi/coffee-client/startup.sh");
+}
 const str2hex = (str) => {
         var arr = [];
         for (var i = 0, l = str.length; i < l; i ++) {
@@ -88,6 +92,7 @@ module.exports.filterCmd = filterCmd
 module.exports.getSerialNo = getSerialNo
 module.exports.downloadFile = downloadFile
 module.exports.reboot = reboot
+module.exports.unzipRuntime = unzipRuntime
 module.exports.cleanup = cleanup
 module.exports.str2hex = str2hex
 module.exports.getDeviceList = getDeviceList
