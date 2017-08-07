@@ -2,7 +2,10 @@ var ls = require('ls');
 var shell = require("shelljs");
 var fs = require("fs");
 var request = require('request');
-var config = require('./config')
+var config = require('./config');
+const EventEmitter = require('events');
+const eventPipe = new EventEmitter();
+
 const Machine = require('./machineRestInterface');
 
 exports.getSendCmdStr = function (cmdPrefix, deviceAddress){
@@ -65,7 +68,9 @@ const getSerialNo = () => {
 			var array = line.split(':');
 			if(array.length==2){
 				console.log(array[1].trim());
-				return array[1].trim();
+				console.log("begin to emit event serialNo");
+				eventPipe.emit("serialNo",array[1].trim());
+				//return array[1].trim();
 			}else{
 				console.log('error to read /proc/cpuinfo');
 				return 'error device'
@@ -93,15 +98,7 @@ const isPowerOff = () =>{
 	return false;
 }
 
-const getMachineStatus = (serialNo) =>{
-	//const id = '59841905369dbc1ee8d5511a';
-	//get by id
-	var data = Machine.getMachineById(serialNo);
-	console.log(data);
-	return data;
-}
-
-module.exports.getMachineStatus = getMachineStatus
+module.exports.eventPipe = eventPipe
 module.exports.isPowerOff = isPowerOff
 module.exports.filterCmd = filterCmd
 module.exports.getSerialNo = getSerialNo
