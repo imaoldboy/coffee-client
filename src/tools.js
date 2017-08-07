@@ -3,6 +3,7 @@ var shell = require("shelljs");
 var fs = require("fs");
 var request = require('request');
 var config = require('./config')
+const Machine = require('./machineRestInterface');
 
 exports.getSendCmdStr = function (cmdPrefix, deviceAddress){
 	return Buffer.from("B0C0A80101001A", "hex")
@@ -88,6 +89,20 @@ const filterCmd = (cmdstr, filterArray) => {
 
 }
 
+const isPowerOff = () =>{
+	return false;
+}
+
+const getMachineStatus = (serialNo) =>{
+	//const id = '59841905369dbc1ee8d5511a';
+	//get by id
+	var data = Machine.getMachineById(serialNo);
+	console.log(data);
+	return data;
+}
+
+module.exports.getMachineStatus = getMachineStatus
+module.exports.isPowerOff = isPowerOff
 module.exports.filterCmd = filterCmd
 module.exports.getSerialNo = getSerialNo
 module.exports.downloadFile = downloadFile

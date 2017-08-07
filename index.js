@@ -5,6 +5,10 @@ var SerialPort = require("serialport");
 var sleep = require('sleep');
 var deviceList = tools.getDeviceList();
 
+var serialNo = '0000000035998155';
+var status = tools.getMachineStatus(serialNo);
+console.log(status);
+
 if(deviceList.length == 2){
 	setInterval(getAuthority(),2000);
 	const parsers = SerialPort.parsers;
@@ -48,6 +52,7 @@ if(deviceList.length == 2){
 	sleep.sleep(10);
 	//tools.reboot();
 }
+
 
 function getUpdateFile(){
 	var filename = 'coffee-client.zip';
