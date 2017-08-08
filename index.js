@@ -11,7 +11,7 @@ var status = '0';
 
 tools.getSerialNo();
 
-if(deviceList.length == 3){
+if(deviceList.length == 2){
 	const parsers = SerialPort.parsers;
 	const parser1 = new parsers.Readline({
 		delimiter: '\r\n'
