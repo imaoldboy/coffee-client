@@ -7,35 +7,12 @@ var deviceList = tools.getDeviceList();
 var readPort = null;
 var writePort = null;
 const Machine = require('./src/machineRestInterface');
-tools.getSerialNo();
-//var serialNo = '0000000031f46074';
-//Machine.getMachineById(serialNo, console.log);
 var status = '0';
-tools.eventPipe.on('serialNo', (serialNo)=>{
-	console.log('got serialNo event.');
-	setInterval(function(){
-		Machine.getMachineById(serialNo, (data)=>{
-			status = data[0]['status'];
-			console.log(status);
-			if(status == '1'){
-				tools.eventPipe.emit('espresso');
-				console.log('machine status is 1, got payment, emit espresso event');
-			}
-		});
-	},2000);
-});
 
-tools.eventPipe.on('espresso', ()=>{
-	writePort.write(config.espresso);
-	writePort.flush();
-	console.log('begin to make espresso.');
-});
+tools.getSerialNo();
 
-
-
-if(deviceList.length == 2){
+if(deviceList.length == 3){
 	const parsers = SerialPort.parsers;
-
 	const parser1 = new parsers.Readline({
 		delimiter: '\r\n'
 	});
@@ -45,6 +22,7 @@ if(deviceList.length == 2){
 	});
 	port1.pipe(parser1);
 	port1.on('open', () => console.log('Port1 open'));
+
 	const parser2 = new parsers.Readline({
 		delimiter: '\r\n'
 	});
@@ -70,13 +48,8 @@ if(deviceList.length == 2){
 	});
 
 
-
 	parser2.on('data', function(data){
 		if(tools.filterCmd(data, config.filterCmdArrayBooting) != true){
-//			if(config.heartbeat2.startsWith(data) && !writePort){
-//				writePort = port2;	
-//				console.log('port2 is write');
-//			}
 			if(config.heartbeat.startsWith(data) && readPort ==null){
 				console.log('port1 is read');
 				readPort = port1;	
@@ -89,9 +62,9 @@ if(deviceList.length == 2){
 	});
 
 }else{
-	console.log('device list size is not 2, so begin to reboot after sleep 10 seconds.');
+	console.log('begin to reboot 10sec');
 	sleep.sleep(10);
-	//tools.reboot();
+	tools.reboot();
 }
 
 
@@ -102,13 +75,32 @@ function getUpdateFile(){
 	});
 }
 
+tools.eventPipe.on('serialNo', (serialNo)=>{
+	console.log('got serialNo event.');
+	setInterval(function(){
+		Machine.getMachineById(serialNo, (data)=>{
+			status = data[0]['status'];
+			console.log(status);
+			if(status == '2'){
+				tools.eventPipe.emit('espresso');
+				console.log('machine status is 1, got payment, emit espresso event');
+			}
+		});
+	},2000);
+});
 
-function getAuthority(){
-	var serialno = tools.getSerialNo();
-	
-}
+tools.eventPipe.on('espresso', ()=>{
+	writePort.write(config.espresso);
+	writePort.flush();
+	console.log('begin to make espresso.');
+});
 
-function getMachineStatus(statusData){
-	Machine.getMachineById(serialNo, console.log);
-}
+tools.eventPipe.on('reboot', (reason,sleepnum)=>{
+	console.log('begin to reboot after sleep 10 seconds, because of:' + reason + ", sleepnum is :" + sleepnum);
+	if(sleepnum>0){
+		sleep.sleep(sleepnum);
+	}	
+	tools.reboot();
+});
+
 

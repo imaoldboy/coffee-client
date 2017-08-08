@@ -89,7 +89,9 @@ const filterCmd = (cmdstr, filterArray) => {
 			return true;
 		}
 	}
-	
+	if(config.shutdown.startsWith(cmdstr)){
+		eventPipe.emit('reboot','power button is pressed.',0);
+	}	
 	return false;
 
 }
