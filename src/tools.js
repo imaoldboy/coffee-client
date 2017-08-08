@@ -84,7 +84,7 @@ const getSerialNo = () => {
 const filterCmd = (cmdstr, filterArray) => {
 	for( var i=0; i< filterArray.length; i++)
 	{
-		if(filterArray[i].startsWith(cmdstr)){
+		if(filterArray[i].startsWith(cmdstr) || cmdstr.startsWith(filterArray[i])){
 			console.log('=====================return true.');
 			return true;
 		}
@@ -99,7 +99,14 @@ const filterCmd = (cmdstr, filterArray) => {
 const isPowerOff = () =>{
 	return false;
 }
+const isReadCmd = (line, cmdStr) =>{
+	if((line.length>17) && (line.substring(7,9) == cmdStr.substring(7,9)) && (line.substring(15,17) == cmdStr.substring(15,17))){
+		return true;
+	}else
+		return false
+}
 
+module.exports.isReadCmd = isReadCmd
 module.exports.eventPipe = eventPipe
 module.exports.isPowerOff = isPowerOff
 module.exports.filterCmd = filterCmd
