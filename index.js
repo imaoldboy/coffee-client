@@ -113,8 +113,9 @@ tools.eventPipe.on('serialNo', (serialNo)=>{
 					var cups = parseInt(data[0]['cups'], 10);
 					cups = cups+1;
 					console.log('id is:' + id);
+					console.log('cups is:' + cups);
 					var args = {
-						data: { status:config.machine_status_busy, cups: cups},
+						data: { status:config.machine_status_busy, cups: ""+cups},
 						headers: { "Content-Type": "application/json" }
 					};
 					console.log('begin to update machines status to 2.');
