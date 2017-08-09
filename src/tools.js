@@ -96,6 +96,17 @@ const filterCmd = (cmdstr, filterArray) => {
 
 }
 
+const filterReadCmd = (cmdstr, filterArray) => {
+	for( var i=0; i< filterArray.length; i++)
+	{
+		if(isReadCmd(cmdstr,filterArray[i])){
+			console.log('got read filter cmd.=====================return true.');
+			return true;
+		}
+	}
+	return false;
+
+}
 const isPowerOff = () =>{
 	return false;
 }
@@ -110,6 +121,7 @@ module.exports.isReadCmd = isReadCmd
 module.exports.eventPipe = eventPipe
 module.exports.isPowerOff = isPowerOff
 module.exports.filterCmd = filterCmd
+module.exports.filterReadCmd = filterReadCmd
 module.exports.getSerialNo = getSerialNo
 module.exports.downloadFile = downloadFile
 module.exports.reboot = reboot

@@ -38,6 +38,7 @@ if(deviceList.length == 2){
 
 	parser1.on('data', function(data){
 		if(tools.filterCmd(data, config.filterCmdArrayBooting) != true){
+		//if(tools.filterCmd(data, config.filterCmdArrayBooting) != true  && tools.filterReadCmd(data, config.filterReadCmdArray) != true){
 			if(config.heartbeat.startsWith(data) && readPort ==null){
 				console.log('port1 is read');
 				readPort = port1;	
@@ -54,6 +55,7 @@ if(deviceList.length == 2){
 
 	parser2.on('data', function(data){
 		if(tools.filterCmd(data, config.filterCmdArrayBooting) != true){
+		//if(tools.filterCmd(data, config.filterCmdArrayBooting) != true  && tools.filterReadCmd(data, config.filterReadCmdArray) != true){
 			if(config.heartbeat.startsWith(data) && readPort ==null){
 				console.log('port1 is read');
 				readPort = port1;	

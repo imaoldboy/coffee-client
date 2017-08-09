@@ -23,6 +23,7 @@ var config = {
 	filterCmdArray : [":010600010508EB\r\n",":010600010005F3\r\n",":010600010006F2\r\n",":010600010007F1\r\n",":010600010509EA\r\n",":010600010409EB\r\n"],
 	cmdArrayError : [":0104000123500000000200",":0104000310000000000400",":0104000313000000000200",":0104000313000000000100"],
 	filterCmdArrayBooting : [":010600010508EB\r\n",":010600010005F3\r\n",":010600010006F2\r\n",":010600010007F1\r\n"],
+	filterReadCmdArray : [":0104004213000000000000"],
 
 	//#message from HMI-->MainBoard
 	sys_error        : "00000BF0\r\n",
@@ -50,6 +51,7 @@ var config = {
 	FullOfWasteWater : ":0104000313000000000400",
 	FullOfDrogs      : ":0104040310000000001100",
 	coffeeConfirm    : ":0104052021110000000000",
+	cleanMilkCream   : ":0104004213000000000000",
 	CoffeeReady      : ""
 
 
