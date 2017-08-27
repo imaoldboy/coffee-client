@@ -1,3 +1,6 @@
+const EventEmitter = require('events');
+const eventPipe = new EventEmitter();
+var cmdBufferIndex = 0;
 var SerialPort = require("serialport");
 var readCmd1 = Buffer.from("B0C0A80101001A", "hex")
 var dataBuffer = new Array();
@@ -48,12 +51,20 @@ port.open(function (err) {
  
 });
 
-
-port.on('open', function() {
-	console.log('in open');
-});
-
 port.on('data', function (data) {
 //	console.log('Data:', data.toString('hex'));
-	dataBuffer.push(data.toString('hex'));
+	var dataHex = data.toString('hex');
+	if(isCommandIndex(dataHex) || cmdBufferIndex>0){
+		dataBuffer.push(data.toString('hex'));
+		cmdBufferIndex++;
+	}
+	if(cmdBufferIndex == 7){
+		eventPipe.emit('commandIsOk');
+		cmdBufferIndex = 0;
+	}
+
 });
+
+eventPipe.on('commandIsOk', readDC(data, cmd));
+
+
