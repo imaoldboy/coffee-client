@@ -12,7 +12,7 @@ const getMachineById = (id, callback) =>{
 	//console.log("id is: "+id);
 	//console.log("full url is: "+machineRestUrl+id);
 	client.get(machineRestUrl + id, function (data, response) {
-	//	console.log(data);
+		console.log(data);
 		callback(data);
 	}).on('error', function (err) {
 		console.log('something went wrong on the request of getMachineById', err.request.options);

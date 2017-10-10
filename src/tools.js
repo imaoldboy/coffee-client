@@ -108,7 +108,12 @@ const filterReadCmd = (cmdstr, filterArray) => {
 
 }
 const isPowerOff = () =>{
-	return false;
+	var deviceList = getDeviceList();
+	if(deviceList.length == 2){
+		return false;
+	}else{
+		return true;
+	}
 }
 const isReadCmd = (line, cmdStr) =>{
 	if((line.length>17) && (line.substring(7,9) == cmdStr.substring(7,9)) && (line.substring(15,17) == cmdStr.substring(15,17))){

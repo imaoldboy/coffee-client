@@ -3,6 +3,10 @@ var config = require('./src/config');
 var tools = require('./src/tools');
 var SerialPort = require("serialport");
 var sleep = require('sleep');
+while(tools.isPowerOff()==true){
+	console.log("machine is power off, so sleep 10 seconds.");
+	sleep.sleep(10);
+}
 var deviceList = tools.getDeviceList();
 var readPort = null;
 var writePort = null;
