@@ -3,6 +3,7 @@ var shell = require("shelljs");
 var fs = require("fs");
 var request = require('request');
 var config = require('./config');
+var SerialPort = require("serialport");
 const EventEmitter = require('events');
 const eventPipe = new EventEmitter();
 
@@ -90,7 +91,7 @@ const filterCmd = (cmdstr, filterArray) => {
 		}
 	}
 	if(config.shutdown.startsWith(cmdstr)){
-		eventPipe.emit('reboot','power button is pressed.',0);
+		eventPipe.emit('reboot','power button is pressed.',10);
 	}	
 	return false;
 
@@ -107,12 +108,66 @@ const filterReadCmd = (cmdstr, filterArray) => {
 	return false;
 
 }
-const isPowerOff = () =>{
-	var deviceList = getDeviceList();
+const isPowerOff = (deviceList) =>{
 	if(deviceList.length == 2){
-		return false;
+		try{
+			const parsers = SerialPort.parsers;
+			const parser1 = new parsers.Readline({ delimiter: '\r\n' });
+			const port1 = new SerialPort('/dev/'+deviceList[0], {
+				baudRate: 38400,
+				stopBits:2
+			});
+			port1.pipe(parser1);
+			port1.on('open', () => console.log('Port1 open'));
+			port1.on('error',function(err){
+				console.log('port1 open Error: ',err.message);
+				eventPipe.emit("machinePowerStatus","error");
+			});
+			const parser2 = new parsers.Readline({ delimiter: '\r\n' });
+			const port2 = new SerialPort('/dev/'+deviceList[1], {
+				baudRate: 38400,
+				stopBits:2
+			});
+			port2.pipe(parser2);
+			port2.on('open', () => console.log('Port2 open'));
+			port2.on('error',function(err){
+				console.log('port2 open Error: ',err.message);
+				eventPipe.emit("machinePowerStatus","error");
+			});
+			parser1.on('data', function(data){
+				data = data + '\r\n';
+				port1.write(data);
+				port1.flush();
+				if(data.length>=3){
+					eventPipe.emit("machinePowerStatus","ok");
+				}else{
+					eventPipe.emit("machinePowerStatus","poweroff");
+				}
+			});
+
+			parser2.on('data', function(data){
+				data = data + '\r\n';
+				port2.write(data);
+				port2.flush();
+				if(data.length>=3){
+					eventPipe.emit("machinePowerStatus","ok");
+				}else{
+					eventPipe.emit("machinePowerStatus","poweroff");
+				}
+			});
+
+		}catch(err){
+			console.log("error happens when test machine's power status.");
+			eventPipe.emit("machinePowerStatus","error");
+		}finally{
+			if(port1)
+				port1.close();
+			if(port2)
+				port2.close();
+		}
+
 	}else{
-		return true;
+		eventPipe.emit("machinePowerStatus","error");
 	}
 }
 const isReadCmd = (line, cmdStr) =>{
